@@ -29,7 +29,7 @@ class sigPerceptron:
         self.dimension = in_dimension
         self.w=[]
         for i in range(in_dimension):
-            self.w.append([float(0)])
+            self.w.append([float(1)])
     def mean_sq_error(self,y, y_exp):
         ans = 0
         for i in range(len(y)):
@@ -58,7 +58,7 @@ class sigPerceptron:
         return self.w;
     
     def train(self, x, y, learning_rate, momentum):
-        max_epoch = 6000
+        max_epoch = 10
         epoch = 0
         last_delta = []
         for i in range(len(self.w)):
@@ -89,6 +89,7 @@ class sigPerceptron:
         
         
 if( __name__=="__main__"):
+    # this is just a test
     xw=[]
     x=[]
     y=[]
