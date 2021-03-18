@@ -15,7 +15,7 @@ def tanh(b,x):
     return np.tanh(b*x)
 
 def diffSigmoidActfunc(b,x):
-    y = sigmoidActfunc(b*x)
+    y = sigmoidActfunc(b,x)
     return b*(y*(1-y))
 
 def diffTanh(b,x):
