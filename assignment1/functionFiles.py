@@ -22,3 +22,8 @@ def diffTanh(b,x):
     y = tanh(b,x)
     return b*(1-y*y)
 
+def LinearFunc(b,x):
+    return b*x
+
+def diffLinearFunc(b,x):
+    return b;
