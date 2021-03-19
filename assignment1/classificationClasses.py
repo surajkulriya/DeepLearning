@@ -48,8 +48,17 @@ class noHiddenLayer:
     def diffActFunc(self, x):
         return functionFiles.diffSigmoidActfunc(self.beta, x)
     
-    def train(self, x, y, y_int, learning_rate, momentum):
-        max_epoch = 1000
+    def getClassLabels(self, x):
+        y = []
+        for i in range(len(x)):
+            y_exp = self.output(x[i])
+            y.append(y_exp.index(max(y_exp))+1)
+        return y
+    
+    def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid):
+        max_epoch = 100
+        test_accuracy = []
+        valid_accuracy = []
         for epoch in range(max_epoch):
             y_arr = []
             for i in range(len(x)):
@@ -63,7 +72,16 @@ class noHiddenLayer:
                         self.w[k][j]+= mul*x[i][j]
         
             (self.accuracy).append(self.classAcuracy(y_int, y_arr))
+            y_test_exp = self.getClassLabels(x_test)
+            y_valid_exp = self.getClassLabels(x_valid)
+            test_accuracy.append(self.classAcuracy(y_test, y_test_exp))
+            valid_accuracy.append(self.classAcuracy(y_valid, y_valid_exp))
         # print(y_arr)
+        plt.plot(self.accuracy, label = "train accuracy")
+        plt.plot(test_accuracy, label = "test accuracy")
+        # plt.plot(valid_accuracy, label = "valid accuracy")
+        plt.legend()
+        plt.show()
     
     def classAcuracyVsepoch(self):
         plt.plot(self.accuracy)
@@ -134,8 +152,21 @@ class oneHiddenLayer:
             ans.append(self.outActFunc(x[i]))
         return ans 
     
-    def train(self, x, y, y_int, learning_rate, momentum):
-        max_epoch = 10
+    def getClassLabels(self, x):
+        y_arr = []
+        for i in range(len(x)):
+            a1 = self.outputDL1(x[i])
+            s1 = self.sOut(a1)
+            s1.append(float(1.0))
+            a2 = self.factOut(s1)
+            s2 = self.fout(a2)
+            y_arr.append(a2.index(max(a2))+1)
+        return y_arr
+
+    def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid):
+        max_epoch = 50
+        test_accuracy = []
+        valid_accuracy = []
         for epoch in range(max_epoch):
             y_arr = []
             for tuplex in range(len(x)):
@@ -156,9 +187,17 @@ class oneHiddenLayer:
                     for HL in range((self.nHL1+1)):
                         self.w[1][outN][HL]+= mul*s1[HL]
             self.accuracy.append(self.classAcuracy(y_int, y_arr))
+            y_test_exp = self.getClassLabels(x_test)
+            y_valid_exp = self.getClassLabels(x_valid)
+            test_accuracy.append(self.classAcuracy(y_test, y_test_exp))
+            valid_accuracy.append(self.classAcuracy(y_valid, y_valid_exp))
         # print(y_arr)
-                
-
+        plt.plot(self.accuracy, label = "train accuracy")
+        plt.plot(test_accuracy, label = "test accuracy")
+        plt.plot(valid_accuracy, label = "valid accuracy")
+        plt.legend()
+        plt.show()
+    
 
 def takeInputfromTxtfile(path, x, y, Class, y_int):
     file = open(path,"r")
@@ -187,6 +226,12 @@ def takeInputfromTxtfile(path, x, y, Class, y_int):
         y_int.append(Class)
         
 
+def getY(y_int):
+    y = []
+    for i in range(len(y_int)):
+        y.append([0, 0, 0])
+        y[i][y_int[i]-1] = 1
+    return y
 
 if(__name__=="__main__"):
     # print("suraj")
@@ -205,10 +250,14 @@ if(__name__=="__main__"):
     path = "/home/surajkulriya/DeepLearning/assignment1/data/Classification/LS_Group23/Class3.txt"
     takeInputfromTxtfile(path, x, y, 3, y_int)
     
-    # X_train, X_test, y_train, y_test = train_test_split(x, y_int, test_size=0.2)
+    X_train, X_test, y_train_int, y_test_int = train_test_split(x, y_int, test_size=0.2)
+    X_train, X_valid, y_train_int, y_valid_int = train_test_split(X_train, y_train_int, test_size=0.25)
+    y_train = getY(y_train_int)
+    y_test = getY(y_test_int)
+    y_valid = getY(y_valid_int)
     p = oneHiddenLayer(3, 3, 1, 5)
     # print(getattr(p,"w"))
-    p.train(x, y, y_int, 1.0, 0)
+    p.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int)
         
     
     
