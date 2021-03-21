@@ -71,9 +71,6 @@ def patches(image, patch_size):
                 
     return patches
 
-def bin(colour):
-    return colour//32
-
 def colour_histogram(patch, patch_size):
     
     r = np.zeros(8)
@@ -81,9 +78,9 @@ def colour_histogram(patch, patch_size):
     b = np.zeros(8)
     for i in range(patch_size):
         for j in range(patch_size):
-            r[bin(patch[i][j][0])] += 1
-            g[bin(patch[i][j][1])] += 1
-            b[bin(patch[i][j][2])] += 1
+            r[patch[i][j][0])//32] += 1
+            g[patch[i][j][1])//32] += 1
+            b[patch[i][j][2])//32] += 1
     return np.concatenate((r,g,b))
 
 def hist_image_patch(image_paths, patch_size):
@@ -92,11 +89,11 @@ def hist_image_patch(image_paths, patch_size):
         images.append(cv2.imread(i))
     image_patches = []
     for i in images:
-        image_patches.append(patches(i,32))
+        image_patches.append(patches(i,patch_size))
     hist_image_patches = []
     for image in image_patches:
         for patch in image:
-            hist_image_patches.append(colour_histogram(patch,32))
+            hist_image_patches.append(colour_histogram(patch,patch_size))
     return hist_image_patches
 
 def cluster_train(image_paths_train, patch_size):
@@ -134,9 +131,9 @@ if (__name__ == "__main__"):
     image_class_test = [class_dict[i] for i in image_class_test]
 
     image_class_train_1hot = getY(image_class_train)
-
+    
     model = oneHiddenLayer(32,3,1,5)
     model.train(bovw_train,image_class_train_1hot,image_class_train, 1.0,0,bovw_test,image_class_test,bovw_valid,image_class_valid)
-
+    
 
 
