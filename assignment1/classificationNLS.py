@@ -68,9 +68,15 @@ if(__name__=="__main__"):
     y_train = getY(y_train_int)
     y_test = getY(y_test_int)
     y_valid = getY(y_valid_int)
-    p = twoHiddenLayers(3, 3, 1, 5, 4)
-    # print(getattr(p,"w"))
-    p.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, 500, "non-Linearly")
+    
+    p0 = noHiddenLayer(3, 3, 1)
+    p0.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, 500, "non-Linearly")
+    
+    p1 = oneHiddenLayer(3, 3, 1, 5)
+    p1.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "non-Linearly")
+    
+    p2 = twoHiddenLayers(3, 3, 1, 5, 4)
+    p2.train(x, y, y_int, 1, 0, X_test, y_test_int, X_valid, y_valid_int, 500, "non-Linearly")
         
     # p2 = noHiddenLayer(3, 3, 1)
     # p2.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, "non-Linearly")    
