@@ -69,16 +69,32 @@ if(__name__=="__main__"):
     y_test = getY(y_test_int)
     y_valid = getY(y_valid_int)
     
-    p0 = noHiddenLayer(3, 3, 1)
-    p0.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "non-Linearly")
+    # p0 = noHiddenLayer(3, 3, 1)
+    # p0.train(X_train, y_train, y_train_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 100, "non Linearly seprable")    
+    # p0.modelVStarget(X_train, y_train_int, "train data", "non linearly seprable")
+    # p0.modelVStarget(X_test, y_test_int, "test data", "non linearly seprable")
+    # p0.modelVStarget(X_valid, y_valid_int, "validation data", "non linearly seprable")
+    # p0.confMat(X_train, y_train_int)
+    # p0.confMat(X_test, y_test_int)
+    # p0.confMat(X_valid, y_valid_int)
     
-    p1 = oneHiddenLayer(3, 3, 1, 5)
-    p1.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 10, "non-Linearly")
+    
+    # p1 = oneHiddenLayer(3, 3, 1, 5)
+    # p1.train(X_train, y_train, y_train_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "non-Linearly")
+    # p1.modelVStarget(X_train, y_train_int, "train data", "non linearly seprable")
+    # p1.modelVStarget(X_test, y_test_int, "test data", "non linearly seprable")
+    # p1.modelVStarget(X_valid, y_valid_int, "validation data", "non linearly seprable")
+    # p1.confMat(X_train, y_train_int)
+    # p1.confMat(X_test, y_test_int)
+    # p1.confMat(X_valid, y_valid_int)
     
     p2 = twoHiddenLayers(3, 3, 1, 5, 4)
-    p2.train(x, y, y_int, 1, 0, X_test, y_test_int, X_valid, y_valid_int, 10, "non-Linearly")
+    p2.train(X_train, y_train, y_train_int, 1, 0, X_test, y_test_int, X_valid, y_valid_int, 10, "non-Linearly")
+    p2.modelVStarget(X_train, y_train_int, "train data", "non linearly seprable")
+    p2.modelVStarget(X_test, y_test_int, "test data", "non linearly seprable")
+    p2.modelVStarget(X_valid, y_valid_int, "validation data", "non linearly seprable")
+    p2.confMat(X_train, y_train_int)
+    p2.confMat(X_test, y_test_int)
+    p2.confMat(X_valid, y_valid_int)
         
-    # p2 = noHiddenLayer(3, 3, 1)
-    # p2.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, "non-Linearly")    
-    
        

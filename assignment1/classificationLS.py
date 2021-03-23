@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split
 oneHiddenLayer = classificationClasses.oneHiddenLayer
 noHiddenLayer = classificationClasses.noHiddenLayer
 twoHiddenLayers = classificationClasses.twoHiddenLayers
+import random
 def takeInputfromTxtfile(path, x, y, Class, y_int):
     file = open(path,"r")
     data = file.read()
@@ -70,10 +71,13 @@ if(__name__=="__main__"):
     y_valid = getY(y_valid_int)
     
     p0 = noHiddenLayer(3, 3, 1)
-    p0.train(x, y, y_int, 1.0, 0, X_test, y_test_int, X_valid, y_valid_int, 100, "Linearly seprable")    
+    p0.train(X_train, y_train, y_train_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 100, "Linearly seprable")    
+    p0.modelVStarget(X_train, y_train_int, "train data", "linearly seprable")
+    p0.modelVStarget(X_test, y_test_int, "test data", "linearly seprable")
+    p0.modelVStarget(X_valid, y_valid_int, "validation data", "linearly seprable")
     
-    p1 = oneHiddenLayer(3, 3, 1, 5)
-    p1.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "Linearly seprable")
+    # p1 = oneHiddenLayer(3, 3, 1, 5)
+    # p1.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "Linearly seprable")
     
-    p2 = twoHiddenLayers(3, 3, 1, 5, 4)
-    p2.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "Linearly seprable")
+    # p2 = twoHiddenLayers(3, 3, 1, 5, 4)
+    # p2.train(x, y, y_int, 0.1, 0, X_test, y_test_int, X_valid, y_valid_int, 50, "Linearly seprable")
