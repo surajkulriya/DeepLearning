@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import sigNeuron     #self defined library
 from sklearn.model_selection import train_test_split
 import random 
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 class noHiddenLayer:
     inNeurons = 1;
     outNeurons = 1
@@ -85,6 +87,32 @@ class noHiddenLayer:
     
     def classAcuracyVsepoch(self):
         plt.plot(self.accuracy)
+
+    def modelVStarget(self, x, y, data_type, data_sep):
+        y_pred = self.getClassLabels(x)
+        ax = plt.axes(projection='3d')
+        x_x = []
+        x_y = []
+        for i in range(len(x)):
+            x_x.append(x[i][0])
+            x_y.append(x[i][1])
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y true for " + data_sep+" " + data_type+"for no hidden layer");
+        ax.scatter3D(x_x, x_y, y, c = y, label = "Y true")
+        plt.legend()
+        plt.show()
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y  pred for " + data_sep+" " + data_type+"for no hidden layer");
+        ax.scatter3D(x_x, x_y, y_pred, c = y_pred, label = "y pred")
+        plt.legend()
+        plt.show()
+    def confMat(self, x, y):
+        y_pred = self.getClassLabels(x)
+        cf_matrix = confusion_matrix(y, y_pred)
+        sns.heatmap(cf_matrix, annot=True, fmt="d")
+        plt.show()
 
 
 class oneHiddenLayer:
@@ -197,6 +225,33 @@ class oneHiddenLayer:
         plt.legend()
         plt.title("graph for "+data_type+" seprable classes on one hidden layer")
         plt.show()
+    def modelVStarget(self, x, y, data_type, data_sep):
+        y_pred = self.getClassLabels(x)
+        ax = plt.axes(projection='3d')
+        x_x = []
+        x_y = []
+        for i in range(len(x)):
+            x_x.append(x[i][0])
+            x_y.append(x[i][1])
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y true for " + data_sep+" " + data_type+"for one hidden layer");
+        ax.scatter3D(x_x, x_y, y, c = y, label = "Y true")
+        plt.legend()
+        plt.show()
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y  pred for " + data_sep+" " + data_type+"for one hidden layer");
+        ax.scatter3D(x_x, x_y, y_pred, c = y_pred, label = "y pred")
+        plt.legend()
+        plt.show()
+    def confMat(self, x, y):
+        y_pred = self.getClassLabels(x)
+        cf_matrix = confusion_matrix(y, y_pred)
+        sns.heatmap(cf_matrix, annot=True, fmt="d")
+        plt.show()
+
+
     
 class twoHiddenLayers:
     inNeuron = 1
@@ -330,6 +385,34 @@ class twoHiddenLayers:
         plt.legend()
         plt.title("graph for "+data_type+" seprable classes on two hidden layers")
         plt.show()
+    def modelVStarget(self, x, y, data_type, data_sep):
+        y_pred = self.getClassLabels(x)
+        ax = plt.axes(projection='3d')
+        x_x = []
+        x_y = []
+        for i in range(len(x)):
+            x_x.append(x[i][0])
+            x_y.append(x[i][1])
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y true for " + data_sep+" " + data_type+"for two hidden layer");
+        ax.scatter3D(x_x, x_y, y, c = y, label = "Y true")
+        plt.legend()
+        plt.show()
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.set_title("scatter plot for Y  pred for " + data_sep+" " + data_type+"for two hidden layer");
+        ax.scatter3D(x_x, x_y, y_pred, c = y_pred, label = "y pred")
+        plt.legend()
+        plt.show()
+    def confMat(self, x, y):
+        y_pred = self.getClassLabels(x)
+        cf_matrix = confusion_matrix(y, y_pred)
+        sns.heatmap(cf_matrix, annot=True, fmt="d")
+        plt.show()
+
+        
+
 
 
 def takeInputfromTxtfile(path, x, y, Class, y_int):
