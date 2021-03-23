@@ -13,12 +13,14 @@ from sklearn.model_selection import train_test_split
 import random 
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
+from mpl_toolkits.mplot3d import Axes3D 
 class noHiddenLayer:
     inNeurons = 1;
     outNeurons = 1
     w = []
     beta = 1
     accuracy = []
+    error = []
     def __init__(self,inputNeurons, outputClasses,Beta):
         self.inNeurons = inputNeurons
         self.outNeurons = outputClasses
@@ -43,7 +45,13 @@ class noHiddenLayer:
         for i in range(self.outNeurons):
             ans.append(np.matmul(x, self.w[i]))
         return ans
-    
+    def getOutput(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(self.w)):
+                ans[i].append(np.matmul(x[i],self.w[j]))
+        return ans
     def actFunc(self,x):
         return functionFiles.sigmoidActfunc(self.beta, x)
     
@@ -57,30 +65,53 @@ class noHiddenLayer:
             y.append(y_exp.index(max(y_exp))+1)
         return y
     
+        
+    def fOut(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append(self.actFunc(x[i]))
+        return ans;
+    def getfOut(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append(self.fOut(x[i]))
+        return ans;
+    def mse(self, y_true, y_pred):
+        ans = 0
+        for i in range(len(y_pred)):
+            for j in range(len(y_pred[i])):
+                ans += (y_true[i][j]-y_pred[i][j])*(y_true[i][j]-y_pred[i][j])
+        return ans/(2.0*len(y_true))
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
-        test_accuracy = []
-        valid_accuracy = []
+        test_mse = []
+        valid_mse = []
         for epoch in range(max_epoch):
             y_arr = []
+            y_s = []
             for i in range(len(x)):
                 y_exp = self.output(x[i])
+                
                 y_arr.append(y_exp.index(max(y_exp))+1)
                 s = []
                 for ii in range(len(y_exp)): s.append(self.actFunc(y_exp[ii]))
+                y_s.append(s)
                 for k in range(len(s)):    # k'th output neuron
                     mul = (learning_rate)*(y[i][k]-s[k])*(self.diffActFunc(y_exp[k]))
                     for j in range(len(self.w[k])):  #weight associated with j'th neuron of 1st layer and k'th neuron of 2nd layer
                         self.w[k][j]+= mul*x[i][j]
         
             (self.accuracy).append(self.classAcuracy(y_int, y_arr))
-            y_test_exp = self.getClassLabels(x_test)
-            y_valid_exp = self.getClassLabels(x_valid)
-            test_accuracy.append(self.classAcuracy(y_test, y_test_exp))
-            valid_accuracy.append(self.classAcuracy(y_valid, y_valid_exp))
+            self.error.append(self.mse(y_s, y))
+            y_test_exp = self.getOutput(x_test)
+            y_valid_exp = self.getOutput(x_valid)
+            y_test_s = self.getfOut(y_test_exp)
+            y_valid_s = self.getfOut(y_valid_exp)
+            test_mse.append(self.mse(y_test, y_test_s))
+            valid_mse.append(self.mse(y_valid, y_valid_s))
         # print(y_arr)
-        plt.plot(self.accuracy, label = "train accuracy")
-        plt.plot(test_accuracy, label = "test accuracy")
-        plt.plot(valid_accuracy, label = "valid accuracy")
+        plt.plot(self.error, label = "train error")
+        plt.plot(test_mse, label = "test error")
+        plt.plot(valid_mse, label = "valid error")
         plt.title("graph for "+data_type+" seprable classes on no hidden layers")
         plt.legend()
         plt.show()
@@ -90,7 +121,7 @@ class noHiddenLayer:
 
     def modelVStarget(self, x, y, data_type, data_sep):
         y_pred = self.getClassLabels(x)
-        ax = plt.axes(projection='3d')
+        
         x_x = []
         x_y = []
         for i in range(len(x)):
@@ -122,6 +153,7 @@ class oneHiddenLayer:
     beta = 1
     w = [[],[]]
     accuracy = []
+    error = []
     #in inNeurons, we already have included bias term, and the input x too is supposed to have a extra "1" as bias term
     # but in nHL1, we have not included bias term and thus we are giving nHL1+1 weights to each of output neurons
     def __init__(self, inNeurons, outneurons, Beta, nHiddenLayer1):
@@ -144,6 +176,13 @@ class oneHiddenLayer:
             if(y_true[i]==y_exp[i]): ans+=1
         return ans/len(y_true)
     
+    def getMSE(self, y_true, y_pred):
+        ans = 0
+        for i in range(len(y_true)):
+            for j in range(len(y_true[i])):
+                ans += (y_true[i][j]-y_pred[i][j])*(y_true[i][j]-y_pred[i][j])/2.0
+        return ans/len(y_pred)
+    
     def actFunc(self,x):     #activation function defined for hidden layer 1
         return functionFiles.sigmoidActfunc(self.beta, x)
     
@@ -162,6 +201,21 @@ class oneHiddenLayer:
             outDLlayer1.append(np.matmul(x, self.w[0][i]))
         return outDLlayer1
     
+    def getOutputDL1(self, x):
+        ans = []
+        for tuplex in range(len(x)):
+            ans.append([])
+            for neuron in range(self.nHL1):
+                ans[tuplex].append(np.matmul(x[tuplex], self.w[0][neuron]))
+        return ans;
+    
+    def getSoutDL1(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(x[i])):
+                ans[i].append(self.actFunc(x[i][j]))
+        return ans
     def sOut(self, x): # final output of hidden layer 1
         ans = []
         for i in range(len(x)):
@@ -174,11 +228,34 @@ class oneHiddenLayer:
             ans.append(np.matmul(outDLlayer1, self.w[1][i]))
         return ans
     
+    def getFactOut(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(self.outNeurons):
+                ans[i].append(np.matmul(x[i], self.w[1][j]))
+        return ans
     def fout(self, x): # final output of output layer
         ans = []
         for i in range(len(x)):
             ans.append(self.outActFunc(x[i]))
         return ans 
+    
+    def getFout(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(x[i])):
+                ans[i].append(self.actFunc(x[i][j]))
+        return ans;
+    
+    def getNetOut(self, x):
+        out1 = self.getOutputDL1(x)
+        sout1 = self.getSoutDL1(out1)
+        for i in range(len(sout1)): sout1[i].append(float(1))
+        outo = self.getFactOut(sout1)
+        outs = self.getFout(outo)
+        return outs
     
     def getClassLabels(self, x):
         y_arr = []
@@ -207,10 +284,11 @@ class oneHiddenLayer:
                 plt.show()
                 
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
-        test_accuracy = []
-        valid_accuracy = []
+        test_mse = []
+        valid_mse = []
         for epoch in range(max_epoch):
             y_arr = []
+            y_s = []
             if(epoch%(max_epoch//3)==0):
                     self.plotHiddenLayer(x, y, epoch, "train data","non-linearly seprable")
                     self.plotHiddenLayer(x_test, y_test, epoch, "test data","non-linearly seprable")
@@ -221,6 +299,7 @@ class oneHiddenLayer:
                 s1.append(float(1.0)) #bias term
                 a2 = self.factOut(s1)
                 s2 = self.fout(a2)
+                y_s.append(s2)
                 y_arr.append(a2.index(max(a2))+1)
                 for outN in range((self.outNeurons)):
                     for HL in range(self.nHL1):
@@ -233,14 +312,15 @@ class oneHiddenLayer:
                     for HL in range((self.nHL1+1)):
                         self.w[1][outN][HL]+= mul*s1[HL]
             self.accuracy.append(self.classAcuracy(y_int, y_arr))
-            y_test_exp = self.getClassLabels(x_test)
-            y_valid_exp = self.getClassLabels(x_valid)
-            test_accuracy.append(self.classAcuracy(y_test, y_test_exp))
-            valid_accuracy.append(self.classAcuracy(y_valid, y_valid_exp))
+            self.error.append(self.getMSE(y, y_s))
+            y_test_exp = self.getNetOut(x_test)
+            y_valid_exp = self.getNetOut(x_valid)
+            test_mse.append(self.getMSE(y_test, y_test_exp))
+            valid_mse.append(self.getMSE(y_valid, y_valid_exp))
         # print(y_arr)
-        plt.plot(self.accuracy, label = "train accuracy")
-        plt.plot(test_accuracy, label = "test accuracy")
-        plt.plot(valid_accuracy, label = "valid accuracy")
+        plt.plot(self.error, label = "train MSE")
+        plt.plot(test_mse, label = "test MSE")
+        plt.plot(valid_mse, label = "valid MSE")
         plt.legend()
         plt.title("graph for "+data_type+" seprable classes on one hidden layer")
         plt.show()
@@ -280,6 +360,7 @@ class twoHiddenLayers:
     beta = 1
     w = [[],[], []]
     accuracy = []
+    error = []
     #in inNeurons, we already have included bias term, and the input x too is supposed to have a extra "1" as bias term
     # but in nHL1, we have not included bias term and thus we are giving nHL1+1 weights to each of output neurons
     def __init__(self, inNeurons, outneurons, Beta, nHiddenLayer1, nHiddenLayer2):
@@ -306,6 +387,12 @@ class twoHiddenLayers:
         for i in range(len(y_true)): 
             if(y_true[i]==y_exp[i]): ans+=1
         return ans/len(y_true)
+    def getMSE(self, y_true, y_pred):
+        ans = 0
+        for i in range(len(y_true)):
+            for j in range(len(y_true[i])):
+                ans += (y_true[i][j]-y_pred[i][j])*(y_true[i][j]-y_pred[i][j])/2.0
+        return ans/len(y_pred)
     
     def actFunc(self,x):     #activation function defined for hidden layers
         return functionFiles.sigmoidActfunc(self.beta, x)
@@ -325,11 +412,44 @@ class twoHiddenLayers:
             outDLlayer1.append(np.matmul(x, self.w[0][i]))
         return outDLlayer1
     
+    def getOutputDL1(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(self.nHL1):
+                ans[i].append(np.matmul(x[i], self.w[0][j]))
+        return ans;
+    
+    def getSoutDL1(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(x[i])):
+                ans[i].append(self.actFunc(x[i][j]))
+        return ans;
+    
     def outputDL2(self, x):  # activation values output of of hidden layer 2
         outDLlayer2 = []   #output of Hidden Layer
         for i in range(self.nHL2):
             outDLlayer2.append(np.matmul(x, self.w[1][i]))
         return outDLlayer2
+    
+    def getOutputDL2(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(self.nHL2):
+                ans[i].append(np.matmul(x[i], self.w[1][j]))
+        return ans;
+    
+    def getSoutDL2(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(x[i])):
+                ans[i].append(self.actFunc(x[i][j]))
+        return ans;
+        
     
     def sOut(self, x): # final output of hidden layers, given input activation values
         ans = []
@@ -342,6 +462,30 @@ class twoHiddenLayers:
         for i in range(self.outNeurons):
             ans.append(np.matmul(outDLlayer2, self.w[2][i]))
         return ans
+    def getFactout(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(self.outNeurons):
+                ans[i].append(np.matmul(x[i], self.w[2][j]))
+        return ans;
+    def getSoutLayer(self, x):
+        ans = []
+        for i in range(len(x)):
+            ans.append([])
+            for j in range(len(x[i])):
+                ans[i].append(self.actFunc(x[i][j]))
+        return ans
+    def getNetOut(self, x):
+        a1 = self.getOutputDL1(x)
+        s1 = self.getSoutDL1(a1)
+        for i in range(len(s1)): s1[i].append(float(1))
+        a2 = self.getOutputDL2(s1)
+        s2 = self.getSoutDL2(a2)
+        for i in range(len(s2)): s2[i].append(float(1))
+        ao = self.getFactout(s2)
+        ans = self.getSoutLayer(ao)
+        return ans;
     
     def fout(self, x): # final output of output layer, given input of activation values
         ans = []
@@ -431,10 +575,11 @@ class twoHiddenLayers:
     
     
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
-        test_accuracy = []
-        valid_accuracy = []
+        test_mse = []
+        valid_mse = []
         for epoch in range(max_epoch):
             y_arr = []
+            y_s = []
             if(epoch%(max_epoch//3)==0):
                     self.plotHiddenLayer(x, y, epoch, "train data",data_type)
                     self.plotHiddenLayer(x_test, y_test, epoch, "test data",data_type)
@@ -449,6 +594,7 @@ class twoHiddenLayers:
                 s2.append(float(1.0)) #bias term
                 a3 = self.factOut(s2)
                 s3 = self.fout(a3)
+                y_s.append(s3)
                 y_arr.append(a3.index(max(a3))+1)
                 for outN in range((self.outNeurons)):
                     for HL1 in range(self.nHL1):
@@ -466,14 +612,15 @@ class twoHiddenLayers:
                     for HL2 in range(self.nHL2+1):
                         self.w[2][outN][HL2]+=mul*(s2[HL2])
             self.accuracy.append(self.classAcuracy(y_int, y_arr))
-            y_test_exp = self.getClassLabels(x_test)
-            y_valid_exp = self.getClassLabels(x_valid)
-            test_accuracy.append(self.classAcuracy(y_test, y_test_exp))
-            valid_accuracy.append(self.classAcuracy(y_valid, y_valid_exp))
+            y_test_exp = self.getNetOut(x_test)
+            # print(y_test_exp)
+            y_valid_exp = self.getNetOut(x_valid)
+            test_mse.append(self.getMSE(y_test, y_test_exp))
+            valid_mse.append(self.getMSE(y_valid, y_valid_exp))
         # print(y_arr)
-        plt.plot(self.accuracy, label = "train accuracy")
-        plt.plot(test_accuracy, label = "test accuracy")
-        plt.plot(valid_accuracy, label = "valid accuracy")
+        plt.plot(self.error, label = "train accuracy")
+        plt.plot(test_mse, label = "test accuracy")
+        plt.plot(valid_mse, label = "valid accuracy")
         plt.legend()
         plt.title("graph for "+data_type+" seprable classes on two hidden layers")
         plt.show()
