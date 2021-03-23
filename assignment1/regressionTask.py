@@ -43,14 +43,28 @@ if (__name__=="__main__"):
     X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.25)
     
     p0 = noHiddenLayer(2, 1, 1)
-    p0.train(X_train, y_train, y_train, 0.01, 0, X_test, y_test, X_valid, y_valid, 100, "univariate")
+    p0.train(X_train, y_train, y_train, 0.01, 0, X_test, y_test, X_valid, y_valid, 0.1, 10, "univariate")
+    p0.dTypeVSerror(X_train, y_train, X_test, y_test, X_valid, y_valid)
+    p0.modelVSexact(X_train, y_train, "train data")
+    p0.modelVSexact(X_test, y_test, "test data")
+    p0.modelVSexact(X_valid, y_valid,"valid data")
+    p0.xVSy(X_train, y_train, X_test, y_test, X_valid, y_valid,"")
     
     p1 = oneHiddenLayer(2, 1, 1, 5)
-    p1.train(X_train, y_train, y_train, 0.1, 0, X_test, y_test, X_valid, y_valid, 100, "univariate")
+    p1.train(X_train, y_train, y_train, 0.1, 0, X_test, y_test, X_valid, y_valid, 0.1, 10, "univariate")
+    p1.dTypeVSerror(X_train, y_train, X_test, y_test, X_valid, y_valid)
+    p1.modelVSexact(X_train, y_train, "train data")
+    p1.modelVSexact(X_test, y_test, "test data")
+    p1.modelVSexact(X_valid, y_valid,"valid data")
+    p1.xVSy(X_train, y_train, X_test, y_test, X_valid, y_valid,"")
     
     p2 = twoHiddenLayers(2, 1, 1, 5, 4)
-    p2.train(X_train, y_train, y_train, 1, 0, X_test, y_test, X_valid, y_valid, 30, "univariate")
-    
+    p2.train(X_train, y_train, y_train, 0.1, 0, X_test, y_test, X_valid, y_valid, 0.1, 10, "univariate")
+    p2.dTypeVSerror(X_train, y_train, X_test, y_test, X_valid, y_valid)
+    p2.modelVSexact(X_train, y_train, "train data")
+    p2.modelVSexact(X_test, y_test, "test data")
+    p2.modelVSexact(X_valid, y_valid,"valid data")
+    p2.xVSy(X_train, y_train, X_test, y_test, X_valid, y_valid,"")
     
     
     
