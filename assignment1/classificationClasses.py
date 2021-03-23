@@ -190,12 +190,31 @@ class oneHiddenLayer:
             s2 = self.fout(a2)
             y_arr.append(a2.index(max(a2))+1)
         return y_arr
-
+    def plotHiddenLayer(self, x_train, y_train, epoch, data_type, data_sep):
+        if(len(x_train[0])==3):
+            for neuron in range(self.nHL1):
+                output = []
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(x_train)):
+                    output.append(np.matmul(x_train[tuplex], self.w[0][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    x_train_y.append(x_train[tuplex][1])
+                    output[tuplex] = self.actFunc(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_train_x, x_train_y, output, c = output)
+                ax.set_title('surface plot for hidden layer for '+data_sep+' '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
+                
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
         test_accuracy = []
         valid_accuracy = []
         for epoch in range(max_epoch):
             y_arr = []
+            if(epoch%(max_epoch//3)==0):
+                    self.plotHiddenLayer(x, y, epoch, "train data","non-linearly seprable")
+                    self.plotHiddenLayer(x_test, y_test, epoch, "test data","non-linearly seprable")
+                    self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data","non-linearly seprable")
             for tuplex in range(len(x)):
                 a1 = self.outputDL1(x[tuplex])
                 s1 = self.sOut(a1)
@@ -342,12 +361,85 @@ class twoHiddenLayers:
             a3 = self.factOut(s2)
             y_arr.append(a3.index(max(a3))+1)
         return y_arr
-
+    
+    def plotHiddenLayer(self, x_train, y_train, epoch, data_type, data_sep):
+        if(len(x_train[0])==2):
+            output1 = []
+            for neuron in range(self.nHL1):
+                output1.append([])
+                output = []
+                x_train_x = []
+                for tuplex in range(len(x_train)):
+                    output.append(np.matmul(x_train[tuplex], self.w[0][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    output[tuplex] = self.actFunc(output[tuplex])
+                    output1[neuron].append(output[tuplex])
+                plt.scatter(x_train_x, output)
+                plt.title("output of hidden layer 1 for univariate data for "+str(epoch)+"'th epoch for "+data_type+"for "+str(neuron)+"'th neuron")
+                plt.xlabel("input X values")
+                plt.ylabel("output of Hidden neuron")
+                plt.show()
+            output1.append([])
+            for i in range(len(x_train)): output1[-1].append(1)
+            output1 = np.transpose(output1)
+            for neuron in range(self.nHL2):
+                output = []
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(output1)):
+                    output.append(np.matmul(output1[tuplex], self.w[1][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    output[tuplex] = self.actFunc(output[tuplex])
+                plt.scatter(x_train_x, output)
+                plt.title("output of hidden layer 2 for"+ data_sep+ " for "+str(epoch)+"'th epoch for "+data_type+"for "+str(neuron)+"'th neuron")
+                plt.xlabel("input X values")
+                plt.ylabel("output of Hidden neuron")
+                plt.show()
+        if(len(x_train[0])==3):
+            output1 = []
+            for neuron in range(self.nHL1):
+                output = []
+                output1.append([])
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(x_train)):
+                    output.append(np.matmul(x_train[tuplex], self.w[0][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    x_train_y.append(x_train[tuplex][1])
+                    output[tuplex] = self.actFunc(output[tuplex])
+                    output1[neuron].append(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_train_x, x_train_y, output, c = output)
+                ax.set_title('surface plot for hidden layer 1 for bivariate data for '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
+            output1.append([])
+            for i in range(len(x_train)):output1[-1].append(1)
+            output1 = np.transpose(output1)
+            for neuron in range(self.nHL2):
+                output = []
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(output1)):
+                    output.append(np.matmul(output1[tuplex], self.w[1][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    x_train_y.append(x_train[tuplex][1])
+                    output[tuplex] = self.actFunc(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_train_x, x_train_y, output, c = output)
+                ax.set_title('surface plot for hidden layer 2 for bivariate data for '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
+    
+    
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
         test_accuracy = []
         valid_accuracy = []
         for epoch in range(max_epoch):
             y_arr = []
+            if(epoch%(max_epoch//3)==0):
+                    self.plotHiddenLayer(x, y, epoch, "train data",data_type)
+                    self.plotHiddenLayer(x_test, y_test, epoch, "test data",data_type)
+                    self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data",data_type)
+            
             for tuplex in range(len(x)):
                 a1 = self.outputDL1(x[tuplex])
                 s1 = self.sOut(a1)
