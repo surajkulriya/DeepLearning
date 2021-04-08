@@ -65,7 +65,7 @@ class noHiddenLayer:
             x_test_x = []
             x_valid_x = []
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             plt.scatter(x_train_x,y_train, label = "true Y train")
@@ -100,11 +100,11 @@ class noHiddenLayer:
             x_valid_x = []; x_valid_y = []
             
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             for i in range(len(x_train)): x_train_y.append(x_train[i][1])
-            for i in range(len(x_test)): x_test_y.append(x_train[i][1])
+            for i in range(len(x_test)): x_test_y.append(x_test[i][1])
             for i in range(len(x_valid)): x_valid_y.append(x_valid[i][1])
             
             fig = plt.figure()
@@ -153,7 +153,7 @@ class noHiddenLayer:
                     for j in range(len(self.w[k])):  #weight associated with j'th neuron of 1st layer and k'th neuron of 2nd layer
                         self.w[k][j]+= mul*x[i][j]
         
-            (self.rms_arr).append(self.rms(y_int, y_arr))
+            (self.rms_arr).append(self.rms(y, y_arr))
             y_test_exp = self.getValues(x_test)
             y_valid_exp = self.getValues(x_valid)
             test_rms.append(self.rms(y_test, y_test_exp))
@@ -280,7 +280,7 @@ class oneHiddenLayer:
             x_test_x = []
             x_valid_x = []
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             plt.scatter(x_train_x,y_train, label = "true Y train")
@@ -315,11 +315,11 @@ class oneHiddenLayer:
             x_valid_x = []; x_valid_y = []
             
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             for i in range(len(x_train)): x_train_y.append(x_train[i][1])
-            for i in range(len(x_test)): x_test_y.append(x_train[i][1])
+            for i in range(len(x_test)): x_test_y.append(x_test[i][1])
             for i in range(len(x_valid)): x_valid_y.append(x_valid[i][1])
             
             fig = plt.figure()
@@ -594,7 +594,7 @@ class twoHiddenLayers:
             x_test_x = []
             x_valid_x = []
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             plt.scatter(x_train_x,y_train, label = "true Y train")
@@ -629,11 +629,11 @@ class twoHiddenLayers:
             x_valid_x = []; x_valid_y = []
             
             for i in range(len(x_train)): x_train_x.append(x_train[i][0])
-            for i in range(len(x_test)): x_test_x.append(x_train[i][0])
+            for i in range(len(x_test)): x_test_x.append(x_test[i][0])
             for i in range(len(x_valid)): x_valid_x.append(x_valid[i][0])
             
             for i in range(len(x_train)): x_train_y.append(x_train[i][1])
-            for i in range(len(x_test)): x_test_y.append(x_train[i][1])
+            for i in range(len(x_test)): x_test_y.append(x_test[i][1])
             for i in range(len(x_valid)): x_valid_y.append(x_valid[i][1])
             
             fig = plt.figure()

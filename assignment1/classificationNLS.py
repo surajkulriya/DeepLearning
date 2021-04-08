@@ -89,7 +89,7 @@ if(__name__=="__main__"):
     # p1.confMat(X_valid, y_valid_int)
     
     # p2 = twoHiddenLayers(3, 3, 1, 5, 4)
-    # p2.train(X_train, y_train, y_train_int, 1, 0, X_test, y_test_int, X_valid, y_valid_int, 10, "non-Linearly")
+    # p2.train(X_train, y_train, y_train_int, 0.1, 0, X_test, y_test, X_valid, y_valid, 100, "non-Linearly")
     # p2.modelVStarget(X_train, y_train_int, "train data", "non linearly seprable")
     # p2.modelVStarget(X_test, y_test_int, "test data", "non linearly seprable")
     # p2.modelVStarget(X_valid, y_valid_int, "validation data", "non linearly seprable")

@@ -82,12 +82,36 @@ class noHiddenLayer:
             for j in range(len(y_pred[i])):
                 ans += (y_true[i][j]-y_pred[i][j])*(y_true[i][j]-y_pred[i][j])
         return ans/(2.0*len(y_true))
+    
+    
+    def plotOutLayer(self, x, y, epoch, data_type, data_sep):
+        if(len(x[0])==3):
+            x_x = []
+            x_y = []
+            for i in range(len(x)):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+            for neuron in range(self.outNeurons):
+                output = []
+                for tuplex in range(len(x)):
+                    output.append(np.matmul(x[tuplex], self.w[neuron]))
+                    output[tuplex] = self.actFunc(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_x, x_y, output, c = output)
+                ax.set_title('surface plot for output layer for '+data_sep+' '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
+    
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
         test_mse = []
         valid_mse = []
         for epoch in range(max_epoch):
             y_arr = []
             y_s = []
+            if(epoch%(max_epoch//3)==0):
+                    self.plotOutLayer(x, y, epoch, "train data","non-linearly seprable")
+                    self.plotOutLayer(x_test, y_test, epoch, "test data","non-linearly seprable")
+                    self.plotOutLayer(x_valid, y_valid, epoch, "validation data","non-linearly seprable")
+            
             for i in range(len(x)):
                 y_exp = self.output(x[i])
                 
@@ -268,8 +292,10 @@ class oneHiddenLayer:
             y_arr.append(a2.index(max(a2))+1)
         return y_arr
     def plotHiddenLayer(self, x_train, y_train, epoch, data_type, data_sep):
+        output1 = []
         if(len(x_train[0])==3):
             for neuron in range(self.nHL1):
+                output1.append([])
                 output = []
                 x_train_x = []
                 x_train_y = []
@@ -278,9 +304,26 @@ class oneHiddenLayer:
                     x_train_x.append(x_train[tuplex][0])
                     x_train_y.append(x_train[tuplex][1])
                     output[tuplex] = self.actFunc(output[tuplex])
+                    output1[neuron].append(output[tuplex])
                 ax = plt.axes(projection='3d')
                 ax.scatter3D(x_train_x, x_train_y, output, c = output)
                 ax.set_title('surface plot for hidden layer for '+data_sep+' '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
+            output1.append([])
+            for i in range(len(x_train)): output1[-1].append(1)
+            output1 = np.transpose(output1)
+            for neuron in range(self.outNeurons):
+                output = []
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(output1)):
+                    output.append(np.matmul(output1[tuplex], self.w[1][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    x_train_y.append(x_train[tuplex][1])
+                    output[tuplex] = self.outActFunc(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_train_x, x_train_y, output, c = output)
+                ax.set_title('surface plot for output layer for '+data_sep+' '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
                 plt.show()
                 
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
@@ -559,8 +602,10 @@ class twoHiddenLayers:
             output1.append([])
             for i in range(len(x_train)):output1[-1].append(1)
             output1 = np.transpose(output1)
+            output2 = []
             for neuron in range(self.nHL2):
                 output = []
+                output2.append([])
                 x_train_x = []
                 x_train_y = []
                 for tuplex in range(len(output1)):
@@ -568,11 +613,27 @@ class twoHiddenLayers:
                     x_train_x.append(x_train[tuplex][0])
                     x_train_y.append(x_train[tuplex][1])
                     output[tuplex] = self.actFunc(output[tuplex])
+                    output2[neuron].append(output[tuplex])
                 ax = plt.axes(projection='3d')
                 ax.scatter3D(x_train_x, x_train_y, output, c = output)
                 ax.set_title('surface plot for hidden layer 2 for bivariate data for '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
                 plt.show()
-    
+            output2.append([])
+            for i in range(len(x_train)): output2[-1].append(1)
+            output2 = np.transpose(output2)
+            for neuron in range(self.outNeurons):
+                output = []
+                x_train_x = []
+                x_train_y = []
+                for tuplex in range(len(output2)):
+                    output.append(np.matmul(output2[tuplex], self.w[2][neuron]))
+                    x_train_x.append(x_train[tuplex][0])
+                    x_train_y.append(x_train[tuplex][1])
+                    output[tuplex] = self.outActFunc(output[tuplex])
+                ax = plt.axes(projection='3d')
+                ax.scatter3D(x_train_x, x_train_y, output, c = output)
+                ax.set_title('surface plot for output layer for bivariate data for '+ data_type+ ' for '+str(epoch)+"'th epoch for "+str(neuron)+"'th neuron");
+                plt.show()
     
     def train(self, x, y, y_int, learning_rate, momentum, x_test, y_test, x_valid, y_valid, max_epoch, data_type):
         test_mse = []
