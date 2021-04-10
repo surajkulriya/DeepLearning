@@ -19,7 +19,7 @@ train_labels = train_df["label"].to_list()
 valid_labels = valid_df["label"].to_list()
 test_labels = test_df["label"].to_list()
 
-labels_dict = {"bayou":0,"desert_vegetation":1,"music_store":2}
+labels_dict = {"bayou":1,"desert_vegetation":2,"music_store":3}
 
 y_train = [labels_dict[i] for i in train_labels]
 y_valid = [labels_dict[i] for i in valid_labels]
@@ -35,5 +35,5 @@ x_train = train_df.values.tolist()
 x_valid = valid_df.values.tolist()
 x_test = test_df.values.tolist()
 
-model = twoHiddenLayers(32,3,0.5,33,33)
-model.train(x_train, y_train_1hot, y_train, 1, 0, x_test, y_test, x_valid, y_valid, 1000, "TwohiddenLayers")
+model = twoHiddenLayers(32,3,0.5,12,18)
+model.train(x_train, y_train_1hot, y_train, 0.3, 0.3, x_test, y_test, x_valid, y_valid, 1000, "TwohiddenLayers")
