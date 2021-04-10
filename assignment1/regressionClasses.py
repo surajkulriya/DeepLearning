@@ -489,8 +489,8 @@ class oneHiddenLayer:
             y_arr = []
             if(epoch%(max_epoch//3)==0):
                     self.plotHiddenLayer(x, y, epoch, "train data")
-                    self.plotHiddenLayer(x_test, y_test, epoch, "test data")
-                    self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data")
+                    # self.plotHiddenLayer(x_test, y_test, epoch, "test data")
+                    # self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data")
             for tuplex in range(len(x)):
                 a1 = self.outputDL1(x[tuplex])
                 s1 = self.sOut(a1)
@@ -826,8 +826,8 @@ class twoHiddenLayers:
             y_arr = []
             if(epoch%(max_epoch//3)==0):
                     self.plotHiddenLayer(x, y, epoch, "train data")
-                    self.plotHiddenLayer(x_test, y_test, epoch, "test data")
-                    self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data")
+                    # self.plotHiddenLayer(x_test, y_test, epoch, "test data")
+                    # self.plotHiddenLayer(x_valid, y_valid, epoch, "validation data")
                     
             for tuplex in range(len(x)):
                 a1 = self.outputDL1(x[tuplex])

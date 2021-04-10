@@ -168,6 +168,32 @@ class noHiddenLayer:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
+    def showBoundary(self, x, y):
+        y_exp = self.getClassLabels(x)
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==1):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 1")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==2):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 2")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==3):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 3")
+        plt.legend()
+        plt.show()
+        
 
 
 class oneHiddenLayer:
@@ -392,6 +418,32 @@ class oneHiddenLayer:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
+    def showBoundary(self, x, y):
+        y_exp = self.getClassLabels(x)
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==1):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 1")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==2):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 2")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==3):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 3")
+        plt.legend()
+        plt.show()
+    
 
 
     
@@ -710,6 +762,32 @@ class twoHiddenLayers:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
+    def showBoundary(self, x, y):
+        y_exp = self.getClassLabels(x)
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==1):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 1")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==2):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 2")
+        x_x = []
+        x_y = []
+        for i in range(len(y_exp)):
+            if(y_exp[i]==3):
+                x_x.append(x[i][0])
+                x_y.append(x[i][1])
+        plt.scatter(x_x, x_y, label = "class 3")
+        plt.legend()
+        plt.show()
+    
 
         
 
