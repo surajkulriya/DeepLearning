@@ -168,7 +168,11 @@ class noHiddenLayer:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
-    def showBoundary(self, x, y):
+    def showBoundary(self):
+        x = []
+        for p_x in range(-60,60):
+            for p_y in range(-60,60):
+                x.append([p_x/10,p_y/10,1])
         y_exp = self.getClassLabels(x)
         x_x = []
         x_y = []
@@ -418,7 +422,11 @@ class oneHiddenLayer:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
-    def showBoundary(self, x, y):
+    def showBoundary(self):
+        x = []
+        for p_x in range(-60,60):
+            for p_y in range(-60,60):
+                x.append([p_x/10,p_y/10,1])
         y_exp = self.getClassLabels(x)
         x_x = []
         x_y = []
@@ -731,9 +739,9 @@ class twoHiddenLayers:
             test_mse.append(self.getMSE(y_test, y_test_exp))
             valid_mse.append(self.getMSE(y_valid, y_valid_exp))
         # print(y_arr)
-        plt.plot(self.error, label = "train accuracy")
-        plt.plot(test_mse, label = "test accuracy")
-        plt.plot(valid_mse, label = "valid accuracy")
+        plt.plot(self.error, label = "train mse")
+        plt.plot(test_mse, label = "test mse")
+        plt.plot(valid_mse, label = "valid mse")
         plt.legend()
         plt.title("graph for "+data_type+" seprable classes on two hidden layers")
         plt.show()
@@ -762,7 +770,11 @@ class twoHiddenLayers:
         cf_matrix = confusion_matrix(y, y_pred)
         sns.heatmap(cf_matrix, annot=True, fmt="d")
         plt.show()
-    def showBoundary(self, x, y):
+    def showBoundary(self):
+        x = []
+        for p_x in range(-60,60):
+            for p_y in range(-60,60):
+                x.append([p_x/10,p_y/10,1])
         y_exp = self.getClassLabels(x)
         x_x = []
         x_y = []
@@ -788,7 +800,6 @@ class twoHiddenLayers:
         plt.legend()
         plt.show()
     
-
         
 
 
